@@ -56,7 +56,7 @@ export default {
 
             this.postUser(
                 this.user,
-                (function(err, user){
+                (function(err){
 
                     this.sending = false;
                     if(err)
@@ -78,7 +78,7 @@ export default {
                     
                     params.id = this.$store.state.userData.length + 1;
                     this.$store.state.userData.push(params);
-                    callback(null, params);
+                    callback(null);
                 }).bind(this)
                 ,
                 1000
