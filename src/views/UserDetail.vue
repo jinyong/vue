@@ -10,34 +10,6 @@
 </template>
 
 <script>
-let userData = [
-    {
-        id: 1,
-        name: 'Takuya Tejima',
-        description: '東南アジアで働くエンジニアです。'
-    },
-    {
-        id: 2,
-        name: 'Yohei Noda',
-        description: 'アウトドア・フットサルが興味のエンジニアです。'
-    }
-];
-
-let getUser = function(userId, callback){
-
-    setTimeout(
-        (function(){
-
-            let filteredUsers = userData.filter(function(user){
-                return user.id === parseInt(userId, 10);
-            });
-
-            callback(null, filteredUsers && filteredUsers[0]);
-        }),
-        1000
-    );
-};
-
 export default {
     data: function(){
         return {
@@ -53,11 +25,25 @@ export default {
         '$route': 'fetchData'
     },
     methods: {
+        getUser: function(userId, callback){
+
+            setTimeout(
+                (function(){
+
+                    let filteredUsers = this.$store.state.userData.filter(function(user){
+                        return user.id === parseInt(userId, 10);
+                    });
+
+                    callback(null, filteredUsers && filteredUsers[0]);
+                }).bind(this),
+                1000
+            );
+        },
         fetchData: function(){
 
             this.loading = true;
 
-            getUser(this.$route.params.userId, (function(err, user){
+            this.getUser(this.$route.params.userId, (function(err, user){
 
                 this.loading = false;
 

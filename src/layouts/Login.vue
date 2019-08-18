@@ -1,49 +1,46 @@
 <template>
   <div>
-      <b-row class="d-flex justify-content-center">
-          <b-col sm="10" md="6" lg="4">
-              <b-form>
-                  <b-input-group>
-                      <b-input-group-prepend>
-                        <v-fa icon="user-circle" class="mx-auto" size="lg"></v-fa>
-                      </b-input-group-prepend>
-
-                      <b-form-input
-                        id="input-1"
-                        required
-                        placeholder="Enter ID"
-                        ></b-form-input>
-                  </b-input-group>
-
-                  <b-input-group>
-                    <b-input-group-prepend>
-                        <v-fa icon="lock" size="lg"></v-fa>
-                    </b-input-group-prepend>
-
-                    <b-form-input
-                      id="input-2"
-                      type="password"
-                      required
-                      placeholder="Enter password"
-                    ></b-form-input>
-                  </b-input-group>
-
-                  <b-button type="submit" variant="primary">Login</b-button>
-                </b-form>
-          </b-col>
-      </b-row>
+    <h2>Login</h2>
+    <p v-if="$route.query.redirect">
+      ログインしてください。
+    </p>
+    
+    <form @submit.prevent="login">
+      <label><input v-model="email" placeholder="email"></label>
+      <label><input type="password" v-model="pass" placeholder="password"></label>
+      <br>
+      <button type="submit">ログイン</button>
+      <p class="error" v-if="error">ログインに失敗しました。</p>
+    </form>
   </div>
 </template>
 
 <script>
+  import Auth from '../auth'
+
   export default {
     data() {
       return {
-        
+        email: 'vue@example.com',
+        pass: '',
+        error: false
       }
     },
     methods: {
-      
+      login: function(){
+        
+        Auth.login(
+          this.email,
+          this.pass,
+          (function(loggedIn){
+
+            if(!loggedIn)
+              this.error = true;
+            else
+              this.$router.replace(this.$route.query.redirect || '/');
+          }).bind(this)
+        );
+      }
     }
   }
 </script>

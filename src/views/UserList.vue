@@ -3,35 +3,21 @@
     <div class="loading" v-if="loading">読み込み中...</div>
     <div v-if="error" class="error">{{error}}</div>
     <div v-for="user in users" :key="user.id">
-      <h2>{{user.name}}</h2>
+      <h2>
+          <router-link :to="{path:'/users/' + user.id}">{{user.name}}</router-link>
+        </h2>
     </div>
   </div>
 </template>
 
 <script>
 import { setTimeout } from 'timers';
-let getUsers = function(callback){
-  setTimeout(
-    callback(null, [
-      {
-        id: 1,
-        name: 'Takuya Tejima'
-      },
-      {
-        id: 2,
-        name: 'Yohei Noda'
-      }
-    ])
-    ,
-    1000
-  );
-};
 
 export default {
   data: function(){
     return {
       loading: false,
-      users: function(){return []},
+      users: [],
       error: null
     }
   },
@@ -45,14 +31,10 @@ export default {
     fetchData: function(){
 
       this.loading = true;
-      getUsers((function(err, users){
+      
+      this.users = this.$store.state.userData;
 
-        this.loading = false;
-        if(err)
-          this.error = err.toString();
-        else
-          this.users = users;
-      }).bind(this));
+      this.loading = false;
     }
   }
 }
